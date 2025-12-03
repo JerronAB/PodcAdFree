@@ -1,0 +1,79 @@
+services:
+  podfetch:
+    image: samuel19982/podfetch:latest
+    container_name: podfetch
+    user: "${UID:-1000}:${GID:-1000}"
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./assets:/app/podcasts
+      - ./config/podfetch:/app/db
+    environment:
+      - POLLING_INTERVAL=30
+      - SERVER_URL=http://localhost:8000
+      - DATABASE_URL=sqlite:///app/db/podcast.db
+
+  audioadremover:
+    build:
+      context: ./AudioDupDetector
+    container_name: audioadremover
+    user: "${UID:-1000}:${GID:-1000}"
+    volumes:
+      - ./assets/:/app/assets
+      - ./complete:/app/complete
+    tmpfs:
+      - /app/temp:rw,mode=1777
+    restart: always
+
+  audiobookshelf:
+    image: ghcr.io/advplyr/audiobookshelf:latest
+    ports:
+      - "80:80"
+    volumes:
+      #- </path/to/audiobooks>:/audiobooks
+      - ./complete:/podcasts
+      - ./config/audiobookshelf:/config
+      - ./config/audiobookshelf/metadata:/metadata
+    environment:
+      - TZ=America/Chicago
+
+  cleaner:
+    image: bash:latest
+    container_name: podcast-cleaner
+    volumes:
+      - ./complete:/path
+      - ./cleaner.sh:/app/cleaner.sh
+    entrypoint: ["/usr/local/bin/bash", "/app/cleaner.sh"]
+    restart: unless-stopped
+
+#cloudflare-tunnel:
+#    image: cloudflare/cloudflared:latest
+#    container_name: podcast-tunnel
+#    depends_on:
+#      - 'podfetch'
+#    command:
+#      - tunnel
+#      - --no-autoupdate
+#      - run
+#      - --token
+#      - ${CLOUDFLARE_TOKEN}
+#    restart: unless-stopped
+
+#  n8n:
+#    image: docker.n8n.io/n8nio/n8n
+#    container_name: n8n
+#    restart: unless-stopped
+#    ports:
+#      - "5678:5678"
+#    environment:
+#      - GENERIC_TIMEZONE=America/Chicago # <--- REPLACE WITH YOUR TIMEZONE
+#      - TZ=America/Chicago                 # <--- REPLACE WITH YOUR TIMEZONE
+#      - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true
+#      - N8N_RUNNERS_ENABLED=true
+#    volumes:
+#      - n8n_data:/home/node/.n8n
+#
+#volumes:
+  #podfetch-db:
+  #n8n_data:
