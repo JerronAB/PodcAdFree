@@ -1,0 +1,3 @@
+[submodule "AudioDupDetector"]
+	path = AudioDupDetector
+	url = http://github.com/JerronAB/AudioDupDetector
