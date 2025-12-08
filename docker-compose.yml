@@ -42,7 +42,8 @@ services:
     image: bash:latest
     container_name: podcast-cleaner
     volumes:
-      - ./complete:/path
+      - ./complete:/complete
+      - ./assets:/assets
       - ./cleaner.sh:/app/cleaner.sh
     entrypoint: ["/usr/local/bin/bash", "/app/cleaner.sh"]
     restart: unless-stopped
