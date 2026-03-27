@@ -11,7 +11,8 @@ find /assets -type f -mtime +30 -name '*.mp3' -delete
 SEARCH_DIR="/complete"
 echo "Files that will be deleted:"
 find "$SEARCH_DIR" -type f -mtime +30 -name '*.mp3'
+find "$SEARCH_DIR" -type f -mtime +2 -name '*.ADS.mp3'
 find "$SEARCH_DIR" -type f -mtime +30 -name '*.mp3' -delete
-find "$SEARCH_DIR" -type f -mtime +2 -name '*.ADS.mp3' -delete
+find "$SEARCH_DIR" -type f -mtime +1 -name '*.ADS.mp3' -delete
 # Sleep for 4 hours
 sleep 144000
