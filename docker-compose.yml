@@ -2,7 +2,7 @@ services:
   podfetch:
     image: samuel19982/podfetch:latest
     container_name: podfetch
-    user: "${UID:-1000}:${GID:-1000}"
+    user: 0:0
     restart: unless-stopped
     ports:
       - "8000:8000"
@@ -47,37 +47,3 @@ services:
       - ./cleaner.sh:/app/cleaner.sh
     entrypoint: ["/usr/local/bin/bash", "/app/cleaner.sh"]
     restart: unless-stopped
-
-# To expose these services to the outside world:
-# Tailscale is also a good option
-#cloudflare-tunnel:
-#    image: cloudflare/cloudflared:latest
-#    container_name: podcast-tunnel
-#    depends_on:
-#      - 'podfetch'
-#    command:
-#      - tunnel
-#      - --no-autoupdate
-#      - run
-#      - --token
-#      - ${CLOUDFLARE_TOKEN}
-#    restart: unless-stopped
-
-# For generic file automation tasks: 
-#  n8n:
-#    image: docker.n8n.io/n8nio/n8n
-#    container_name: n8n
-#    restart: unless-stopped
-#    ports:
-#      - "5678:5678"
-#    environment:
-#      - GENERIC_TIMEZONE=America/Chicago # <--- REPLACE WITH YOUR TIMEZONE
-#      - TZ=America/Chicago                 # <--- REPLACE WITH YOUR TIMEZONE
-#      - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true
-#      - N8N_RUNNERS_ENABLED=true
-#    volumes:
-#      - n8n_data:/home/node/.n8n
-#
-#volumes:
-  #podfetch-db:
-  #n8n_data:
