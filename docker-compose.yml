@@ -37,6 +37,7 @@ services:
       - ./config/audiobookshelf/metadata:/metadata
     environment:
       - TZ=America/Chicago
+    restart: unless-stopped
 
   cleaner:
     image: bash:latest

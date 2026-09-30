@@ -6,6 +6,9 @@ find /assets -type d -empty -delete
 
 #delete mp3 files older than 30 days in /assets directory
 find /assets -type f -mtime +30 -name '*.mp3' -delete
+find /assets -type f -mtime +30 -name '*.plain' -delete
+find /assets -type f -mtime +30 -name '*.srt' -delete
+find /assets -type f -mtime +30 -name '*.vtt' -delete
 
 #delete mp3 files older than 45 days in /complete directory
 SEARCH_DIR="/complete"
@@ -14,5 +17,5 @@ find "$SEARCH_DIR" -type f -mtime +45 -name '*.mp3'
 find "$SEARCH_DIR" -type f -mmin +60 -name '*ADS.mp3'
 find "$SEARCH_DIR" -type f -mtime +45 -name '*.mp3' -delete
 find "$SEARCH_DIR" -type f -mmin +60 -name '*ADS.mp3' -delete
-# Sleep for 4 hours
-sleep 144000
+# Sleep for 1 hour
+sleep 3600
